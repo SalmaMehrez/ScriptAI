@@ -948,6 +948,10 @@ class ScriptAI {
         const container = document.getElementById('wizard-container');
         const footer = document.getElementById('footer-actions');
         footer.classList.remove('hidden');
+        if (!this.result) {
+            container.innerHTML = `<div class="p-10 text-center glass border-red-500/20 text-red-400">Error: No result generated. Please try again.</div>`;
+            return;
+        }
         footer.classList.remove('hidden');
         footer.innerHTML = `
             <button onclick="location.reload()" class="btn-secondary">Start Over</button>
@@ -975,7 +979,7 @@ class ScriptAI {
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <h4 class="col-span-full font-bold text-white/40 uppercase tracking-widest text-xs mb-2">Titres Alternatifs</h4>
-                    ${this.result.titres_alternatifs.map(t => `<div class="p-3 glass bg-white/5 rounded-lg text-sm cursor-pointer hover:border-amber/50 border border-transparent transition-all" onclick="navigator.clipboard.writeText('${t.replace(/'/g, "\\'")}')">${t}</div>`).join('')}
+                    ${(this.result.titres_alternatifs || []).map(t => `<div class="p-3 glass bg-white/5 rounded-lg text-sm cursor-pointer hover:border-amber/50 border border-transparent transition-all" onclick="navigator.clipboard.writeText('${t.replace(/'/g, "\\'")}')">${t}</div>`).join('')}
                 </div>
         `;
 
@@ -993,7 +997,7 @@ class ScriptAI {
                             </tr>
                         </thead>
                         <tbody>
-                            ${this.result.tableau.map(row => `
+                            ${(this.result.tableau || []).map(row => `
                                 <tr>
                                     <td class="font-mono text-xs text-amber">${row.timecode_debut} - ${row.timecode_fin}</td>
                                     <td class="text-lg leading-relaxed">${row.texte_parle}</td>
@@ -1008,7 +1012,7 @@ class ScriptAI {
         } else if (this.result.format === 'storyboard') {
             resultHTML += `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    ${this.result.scenes.map(s => `
+                    ${(this.result.scenes || []).map(s => `
                         <div class="glass p-6 space-y-4 border-l-4 border-amber">
                             <div class="flex justify-between items-center">
                                 <span class="bg-amber text-black px-2 py-0.5 rounded text-xs font-bold">SCÈNE ${s.numero_scene}</span>
@@ -1243,14 +1247,14 @@ class ScriptAI {
                         <div class="p-6 glass border-l-4 border-amber">
                             <h3 class="text-amber font-bold uppercase text-xs mb-4">Retention Tricks Used</h3>
                             <ul class="space-y-3">
-                                ${this.result.key_retention_tricks.map(t => `<li class="text-sm flex gap-2"><span>💎</span> ${t}</li>`).join('')}
+                                ${(this.result.key_retention_tricks || []).map(t => `<li class="text-sm flex gap-2"><span>💎</span> ${t}</li>`).join('')}
                             </ul>
                         </div>
                         <!-- Replication Guide -->
                         <div class="p-6 glass border-l-4 border-white">
                             <h3 class="text-white/40 font-bold uppercase text-xs mb-4">How to Replicate</h3>
                             <ul class="space-y-3">
-                                ${this.result.replication_guide.map(g => `<li class="text-sm flex gap-2"><span>🚀</span> ${g}</li>`).join('')}
+                                ${(this.result.replication_guide || []).map(g => `<li class="text-sm flex gap-2"><span>🚀</span> ${g}</li>`).join('')}
                             </ul>
                         </div>
                     </div>
@@ -1273,7 +1277,7 @@ class ScriptAI {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-4">
                             <h4 class="text-xs font-bold uppercase tracking-widest text-red-500/60">Drop Zones (Leaks)</h4>
-                            ${this.result.drop_zones.map(d => `
+                            ${(this.result.drop_zones || []).map(d => `
                                 <div class="p-4 glass border-l-2 border-red-500/40 bg-red-500/5">
                                     <div class="flex justify-between mb-1">
                                         <span class="text-xs font-mono text-red-400">${d.timecode}</span>
@@ -1286,7 +1290,7 @@ class ScriptAI {
                         </div>
                         <div class="space-y-4">
                             <h4 class="text-xs font-bold uppercase tracking-widest text-green-500/60">Engagement Peaks</h4>
-                            ${this.result.engagement_peaks.map(p => `
+                            ${(this.result.engagement_peaks || []).map(p => `
                                 <div class="p-4 glass border-l-2 border-green-500/40 bg-green-500/5">
                                     <span class="text-xs font-mono text-green-400 mb-1 block">${p.timecode}</span>
                                     <p class="text-sm font-medium">${p.reason}</p>
