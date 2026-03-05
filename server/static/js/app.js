@@ -23,7 +23,7 @@ class ScriptAI {
     constructor() {
         this.currentStep = 0; // 0 = Dashboard
         this.totalSteps = 7;
-        this.currentMode = null;
+        this.currentMode = 'full_script';
 
         this.tools = {
             full_script: { name: 'Full Production Script', icon: 'zap', steps: 7, desc: 'Complete end-to-end technical script.' },
@@ -103,15 +103,20 @@ class ScriptAI {
         ];
     }
 
+    init() {
+        this.renderStepper();
+        this.renderStep();
+        this.bindGlobalEvents();
+    }
 
     renderStepper() {
         const stepper = document.getElementById('stepper');
         const stepName = document.getElementById('step-name');
         if (!stepper) return;
 
-        if (this.currentStep === 0 || this.currentMode === 'about') {
+        if (this.currentStep === 0) {
             stepper.classList.add('hidden');
-            stepName.innerText = this.currentMode === 'about' ? "À Propos de ScriptAI" : "ScriptAI Dashboard";
+            stepName.innerText = "ScriptAI Dashboard";
             return;
         }
 
@@ -161,10 +166,9 @@ class ScriptAI {
         const btnNext = document.getElementById('btn-next');
         const footer = document.getElementById('footer-actions');
 
-        if (this.currentStep === 0 || this.currentMode === 'about') {
+        if (this.currentStep === 0) {
             footer.classList.add('hidden');
-            container.innerHTML = this.currentMode === 'about' ? this.getAboutHTML() : this.getDashboardHTML();
-            if (this.currentStep === 0) this.renderLibrary();
+            container.innerHTML = this.getDashboardHTML();
             lucide.createIcons();
             return;
         }
@@ -216,78 +220,8 @@ class ScriptAI {
             return this.getRetentionStepHTML(step);
         } else if (this.currentMode === 'voice_clone') {
             return this.getVoiceCloneStepHTML(step);
-        } else if (this.currentMode === 'about') {
-            return this.getAboutHTML();
         }
         return `<div>Step under construction</div>`;
-    }
-
-    getAboutHTML() {
-        return `
-            <div class="max-w-4xl mx-auto space-y-16 animate-fade-up py-10">
-                <section class="text-center space-y-6">
-                    <div class="inline-block bg-amber/10 border border-amber/20 text-amber text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-[0.3em]">Our Vision</div>
-                    <h1 class="text-7xl font-bold font-syne tracking-tighter leading-none">Revolutionizing <br/><span class="text-amber">Video Production</span></h1>
-                    <p class="text-white/40 text-xl max-w-2xl mx-auto leading-relaxed">ScriptAI was born from a simple observation: content creators spend too much time on structure and not enough on creativity.</p>
-                </section>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="glass p-10 space-y-4">
-                        <div class="w-12 h-12 bg-amber/20 rounded-xl flex items-center justify-center text-amber text-2xl font-bold">01</div>
-                        <h3 class="text-2xl font-bold">The Mission</h3>
-                        <p class="text-white/40 leading-relaxed">Our goal is to provide professional-grade technical scripts to every creator, from solo YouTubers to large production agencies.</p>
-                    </div>
-                    <div class="glass p-10 space-y-4">
-                        <div class="w-12 h-12 bg-amber/20 rounded-xl flex items-center justify-center text-amber text-2xl font-bold">02</div>
-                        <h3 class="text-2xl font-bold">The Engine</h3>
-                        <p class="text-white/40 leading-relaxed">Powered by advanced linguistic models and viral data analysis, our engine understands pacing, retention, and viral DNA better than any standard AI.</p>
-                    </div>
-                </div>
-
-                <section class="glass p-12 relative overflow-hidden">
-                    <div class="absolute -right-20 -top-20 w-80 h-80 bg-amber/5 blur-3xl rounded-full"></div>
-                    <div class="relative z-10 space-y-8">
-                        <h2 class="text-4xl font-bold font-syne">Built-in Power Tools</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <h4 class="text-amber font-bold text-xs uppercase tracking-widest">Phase 1: Essentials</h4>
-                                <ul class="space-y-2 text-sm text-white/40">
-                                    <li><strong class="text-white/60">Full Generation:</strong> End-to-end professional scripts.</li>
-                                    <li><strong class="text-white/60">Hook Master:</strong> High-retention intro engineering.</li>
-                                    <li><strong class="text-white/60">Smart Rewriter:</strong> Tone & pace optimization.</li>
-                                    <li><strong class="text-white/60">Multiformat Adapter:</strong> YT to TikTok/Reels conversion.</li>
-                                </ul>
-                            </div>
-                            <div class="space-y-4">
-                                <h4 class="text-amber font-bold text-xs uppercase tracking-widest">Phase 2 & 3: Advanced</h4>
-                                <ul class="space-y-2 text-sm text-white/40">
-                                    <li><strong class="text-white/60">Script Analysis:</strong> Deep critique & red flag detection.</li>
-                                    <li><strong class="text-white/60">Shot List Gen:</strong> Technical shooting schedules.</li>
-                                    <li><strong class="text-white/60">Retention Predictor:</strong> Simulated engagement curves.</li>
-                                    <li><strong class="text-white/60">Voice Clone:</strong> Precision style mimicry.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="glass p-12 relative overflow-hidden">
-                    <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-white/5 blur-3xl rounded-full"></div>
-                    <div class="relative z-10 space-y-6">
-                        <h2 class="text-4xl font-bold font-syne">Built by Content Experts</h2>
-                        <p class="text-white/60 text-lg">We are a collective of developers, video editors, and scriptwriters dedicated to making the technical part of content creation invisible.</p>
-                        <div class="flex flex-wrap gap-4 pt-4">
-                             <span class="px-4 py-2 bg-white/5 rounded-full text-xs font-bold border border-white/10 uppercase tracking-widest text-white/40">Deep Viral Analysis</span>
-                            <span class="px-4 py-2 bg-white/5 rounded-full text-xs font-bold border border-white/10 uppercase tracking-widest text-white/40">Local First Privacy</span>
-                        </div>
-                    </div>
-                </section>
-
-                <footer class="text-center pt-10">
-                    <button onclick="app.currentMode = null; app.currentStep = 0; app.renderStep(); app.renderStepper();" class="btn-primary">Back to Dashboard</button>
-                </footer>
-            </div>
-        `;
     }
 
     getVoiceCloneStepHTML(step) {
@@ -1097,7 +1031,7 @@ class ScriptAI {
                         <span class="text-amber text-[10px] font-bold uppercase tracking-widest">Hook Immédiat</span>
                         <p class="text-2xl font-bold mt-2">${this.result.hook}</p>
                     </div>
-                    ${this.result.parties.map(p => `
+                    ${(this.result.parties || []).map(p => `
                         <div class="space-y-4">
                             <h3 class="text-amber font-syne text-xl uppercase tracking-tighter">${p.titre}</h3>
                             <p class="text-xl leading-relaxed text-white/80">${p.contenu}</p>
@@ -1113,7 +1047,7 @@ class ScriptAI {
             resultHTML += `
                 <div class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${this.result.items.map(item => `
+                        ${(this.result.items || []).map(item => `
                             <div class="glass p-5 flex items-start gap-4 hover:border-amber/30 transition-all border border-transparent">
                                 <div class="w-6 h-6 rounded border-2 border-amber/30 flex-shrink-0 mt-1"></div>
                                 <div>
@@ -1155,7 +1089,7 @@ class ScriptAI {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${this.result.script_detaille.map(row => `
+                                ${(this.result.script_detaille || []).map(row => `
                                     <tr>
                                         <td class="text-[10px] font-mono text-amber">#${row.id} <br/> <span class="text-white/20">${row.duree}</span></td>
                                         <td class="text-sm font-medium">${row.description}</td>
@@ -1176,13 +1110,13 @@ class ScriptAI {
                         <div class="p-6 glass border-l-4 border-green-500 bg-green-500/5">
                             <h3 class="text-green-500 font-bold uppercase text-xs mb-4">Strengths</h3>
                             <ul class="space-y-2">
-                                ${this.result.strengths.map(s => `<li class="text-sm flex gap-2"><span>✅</span> ${s}</li>`).join('')}
+                                ${(this.result.strengths || []).map(s => `<li class="text-sm flex gap-2"><span>✅</span> ${s}</li>`).join('')}
                             </ul>
                         </div>
                         <div class="p-6 glass border-l-4 border-red-500 bg-red-500/5">
                             <h3 class="text-red-500 font-bold uppercase text-xs mb-4">Weaknesses</h3>
                             <ul class="space-y-2">
-                                ${this.result.weaknesses.map(w => `<li class="text-sm flex gap-2"><span>⚠️</span> ${w}</li>`).join('')}
+                                ${(this.result.weaknesses || []).map(w => `<li class="text-sm flex gap-2"><span>⚠️</span> ${w}</li>`).join('')}
                             </ul>
                         </div>
                     </div>
@@ -1199,7 +1133,7 @@ class ScriptAI {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${this.result.retention_risks.map(r => `
+                                ${(this.result.retention_risks || []).map(r => `
                                     <tr>
                                         <td class="font-mono text-red-400 font-bold">${r.timecode}</td>
                                         <td class="text-sm">${r.reason}</td>
@@ -1214,7 +1148,7 @@ class ScriptAI {
                     <div class="p-8 glass bg-amber/5 border-amber/20">
                         <h3 class="font-syne text-2xl text-amber mb-6">Actionable Improvement Plan</h3>
                         <div class="space-y-4">
-                            ${this.result.improvement_plan.map(p => `
+                            ${(this.result.improvement_plan || []).map(p => `
                                 <div class="flex items-center gap-4 p-4 bg-black/40 rounded-xl border border-white/5">
                                     <div class="w-5 h-5 rounded-full bg-amber/20 border border-amber/40 flex-shrink-0"></div>
                                     <p class="font-medium">${p}</p>
@@ -1232,13 +1166,13 @@ class ScriptAI {
                         <div class="p-6 glass">
                             <h3 class="text-amber font-bold uppercase text-xs mb-4">Gear & Equipment</h3>
                             <div class="flex flex-wrap gap-2">
-                                ${this.result.gear_needed.map(g => `<span class="px-3 py-1 bg-white/5 rounded-full text-xs border border-white/10">${g}</span>`).join('')}
+                                ${(this.result.gear_needed || []).map(g => `<span class="px-3 py-1 bg-white/5 rounded-full text-xs border border-white/10">${g}</span>`).join('')}
                             </div>
                         </div>
                         <div class="p-6 glass">
                             <h3 class="text-amber font-bold uppercase text-xs mb-4">Key Locations</h3>
                             <div class="flex flex-wrap gap-2">
-                                ${this.result.locations.map(l => `<span class="px-3 py-1 bg-white/5 rounded-full text-xs border border-white/10">${l}</span>`).join('')}
+                                ${(this.result.locations || []).map(l => `<span class="px-3 py-1 bg-white/5 rounded-full text-xs border border-white/10">${l}</span>`).join('')}
                             </div>
                         </div>
                     </div>
@@ -1255,7 +1189,7 @@ class ScriptAI {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${this.result.shots.map(s => `
+                                ${(this.result.shots || []).map(s => `
                                     <tr>
                                         <td class="font-mono text-amber">#${s.id}</td>
                                         <td class="font-medium">
@@ -1292,7 +1226,7 @@ class ScriptAI {
                     <div class="glass p-6">
                         <h3 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Structural Skeleton</h3>
                         <div class="flex h-12 w-full rounded-xl overflow-hidden border border-white/10">
-                            ${this.result.structural_skeleton.map((s, idx) => `
+                            ${(this.result.structural_skeleton || []).map((s, idx) => `
                                 <div class="h-full flex items-center justify-center text-[10px] font-bold border-r border-white/10 group relative" 
                                      style="width: ${s.duration_percent}; background: rgba(255, 170, 0, ${0.1 + (idx * 0.1)})">
                                     <span class="truncate px-2">${s.part}</span>
@@ -1365,7 +1299,7 @@ class ScriptAI {
                     <div class="glass p-8">
                          <h4 class="text-xs font-bold uppercase tracking-widest text-white/40 mb-8">Simulated Retention Curve</h4>
                          <div class="h-32 flex items-end gap-1">
-                            ${this.result.simulated_curve_data.map(val => `
+                            ${(this.result.simulated_curve_data || []).map(val => `
                                 <div class="flex-grow bg-amber/20 hover:bg-amber transition-all rounded-t-sm relative group" style="height: ${val}%">
                                     <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-white text-black text-[8px] font-bold px-1 rounded">
                                         ${val}%
@@ -1390,7 +1324,7 @@ class ScriptAI {
                         <p class="text-2xl font-bold tracking-tight">${this.result.concept_global}</p>
                     </div>
                     <div class="grid grid-cols-1 gap-6">
-                        ${this.result.prompts.map(p => `
+                        ${(this.result.prompts || []).map(p => `
                             <div class="glass p-8 flex flex-col md:flex-row gap-8 group hover:border-amber/40 transition-all border border-transparent">
                                 <div class="w-24 flex-shrink-0">
                                     <div class="w-12 h-12 bg-amber rounded-lg flex items-center justify-center mb-2 font-bold text-black">${p.outil[0]}</div>
@@ -1524,10 +1458,8 @@ class ScriptAI {
     }
 
     init() {
-        this.bindGlobalEvents();
-        this.renderStep();
-        this.renderStepper();
         lucide.createIcons();
+        if (this.currentStep === 0) this.renderLibrary();
     }
 
     renderLibrary() {
