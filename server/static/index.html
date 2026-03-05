@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScriptAI — Professional Video Script Generator</title>
+    <link rel="stylesheet" href="/css/index.css?v=2.0">
+    <!-- Tailwind for utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amber: '#ffaa00',
+                        dark: '#0a0a0f',
+                        surface: '#111118'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body class="bg-[#0a0a0f] text-white">
+    <div id="app" class="min-height-[100vh] flex flex-col">
+        <!-- Header / Progress Bar -->
+        <header
+            class="py-6 px-10 flex items-center justify-between sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/10">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+                    <div class="w-8 h-8 bg-amber rounded-lg flex items-center justify-center">
+                        <i data-lucide="zap" class="text-black w-5 h-5"></i>
+                    </div>
+                    <span class="font-syne text-xl font-bold tracking-tighter">Script<span
+                            class="text-amber">AI</span></span>
+                </div>
+                <button onclick="app.currentMode = null; app.currentStep = 0; app.renderStep(); app.renderStepper();"
+                    class="text-white/40 hover:text-white transition-colors text-sm font-bold flex items-center gap-2">
+                    <i data-lucide="home" class="w-4 h-4"></i> Dashboard
+                </button>
+                <button onclick="app.currentMode = 'about'; app.currentStep = 1; app.renderStep(); app.renderStepper();"
+                    class="text-white/40 hover:text-white transition-colors text-sm font-bold flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4"></i> About
+                </button>
+            </div>
+
+            <div class="flex gap-2" id="stepper">
+                <div class="w-8 h-1 round-full bg-amber shadow-[0_0_10px_rgba(255,170,0,0.5)]"></div>
+                <div class="w-8 h-1 round-full bg-white/10"></div>
+                <div class="w-8 h-1 round-full bg-white/10"></div>
+                <div class="w-8 h-1 round-full bg-white/10"></div>
+                <div class="w-8 h-1 round-full bg-white/10"></div>
+                <div class="w-8 h-1 round-full bg-white/10"></div>
+                <div class="w-8 h-1 round-full bg-white/10"></div>
+            </div>
+
+            <div class="text-xs text-white/40 font-medium uppercase tracking-widest hidden md:block" id="step-name">
+                Step 1 — Subject
+            </div>
+        </header>
+
+        <main class="flex-grow container py-12 px-6">
+            <!-- Wizard Step Container -->
+            <div id="wizard-container" class="animate-fade-up">
+                <!-- Content injected by JS -->
+            </div>
+        </main>
+
+        <!-- Footer Actions -->
+        <footer id="footer-actions"
+            class="p-8 border-t border-white/10 flex justify-between items-center bg-[#111118]/50">
+            <button id="btn-prev" class="btn-secondary hidden">Previous</button>
+            <div class="flex-grow"></div>
+            <button id="btn-next" class="btn-primary">Next</button>
+        </footer>
+    </div>
+
+    <script src="/js/app.js?v=2.0"></script>
+</body>
+
+</html>
