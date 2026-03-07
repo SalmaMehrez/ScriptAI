@@ -35,6 +35,7 @@ app.add_middleware(
 
 class GenerateRequest(BaseModel):
     subject: str
+    script_type: str = "YouTube / Content Creator"
     goal: str
     platform: str
     duration: str

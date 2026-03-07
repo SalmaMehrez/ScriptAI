@@ -39,6 +39,7 @@ class ScriptAI {
 
         this.formData = {
             subject: '',
+            script_type: 'YouTube / Content Creator',
             goal: '',
             platform: 'YouTube',
             duration: '3-5 min',
@@ -402,8 +403,27 @@ class ScriptAI {
                         </button>
                     </div>
 
+                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <h4 class="col-span-full font-bold text-white/40 uppercase tracking-widest text-xs mb-2">Type of Script</h4>
+                        ${[
+                    { id: 'Educational Script', icon: 'graduation-cap', desc: 'Tutorials, courses, explainers' },
+                    { id: 'Storytelling Script', icon: 'book-open', desc: 'Stories, personal experiences' },
+                    { id: 'Marketing / Advertising', icon: 'megaphone', desc: 'Ads, promotions, product videos' },
+                    { id: 'YouTube / Content Creator', icon: 'video', desc: 'Classic YT structure (Hook, Outro)' },
+                    { id: 'Social Media (Reels/TikTok)', icon: 'smartphone', desc: 'Short, fast, scroll-stopping' },
+                    { id: 'Narrative / Cinematic', icon: 'film', desc: 'Short films, visuals + dialogues' },
+                    { id: 'Voice Over Only', icon: 'mic', desc: 'Audio narration only' }
+                ].map(t => `
+                            <div class="card-clickable flex flex-col items-center text-center p-4 gap-2 ${this.formData.script_type === t.id ? 'selected' : ''}" onclick="app.handleInput('script_type', '${t.id}')">
+                                <i data-lucide="${t.icon}" class="text-amber mb-1"></i>
+                                <span class="font-bold text-sm">${t.id}</span>
+                                <p class="text-[10px] text-white/40">${t.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <h4 class="col-span-full font-bold text-white/40 uppercase tracking-widest text-xs">Goal</h4>
+                        <h4 class="col-span-full font-bold text-white/40 uppercase tracking-widest text-xs">Primary Goal</h4>
                         ${['Inform / Educate', 'Entertain', 'Sell / Convince', 'Inspire / Motivate', 'Tell a Story'].map(item => `
                             <div class="card-clickable ${this.formData.goal === item ? 'selected' : ''}" onclick="app.handleInput('goal', '${item}')">
                                 <span class="font-bold text-lg">${item}</span>
