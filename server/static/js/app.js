@@ -104,20 +104,15 @@ class ScriptAI {
         ];
     }
 
-    init() {
-        this.renderStepper();
-        this.renderStep();
-        this.bindGlobalEvents();
-    }
 
     renderStepper() {
         const stepper = document.getElementById('stepper');
         const stepName = document.getElementById('step-name');
         if (!stepper) return;
 
-        if (this.currentStep === 0) {
+        if (this.currentStep === 0 || this.currentMode === 'about') {
             stepper.classList.add('hidden');
-            stepName.innerText = "ScriptAI Dashboard";
+            stepName.innerText = this.currentMode === 'about' ? "About ScriptAI" : "ScriptAI Dashboard";
             return;
         }
 
@@ -170,6 +165,13 @@ class ScriptAI {
         if (this.currentStep === 0) {
             footer.classList.add('hidden');
             container.innerHTML = this.getDashboardHTML();
+            lucide.createIcons();
+            return;
+        }
+
+        if (this.currentMode === 'about') {
+            footer.classList.add('hidden');
+            container.innerHTML = this.getAboutHTML();
             lucide.createIcons();
             return;
         }
@@ -1387,6 +1389,50 @@ class ScriptAI {
         alert("Script copied to clipboard!");
     }
 
+    getAboutHTML() {
+        return `
+            <div class="max-w-4xl mx-auto space-y-12 animate-fade-up pt-10 pb-20">
+                <header class="text-center space-y-4">
+                    <h1 class="text-6xl font-bold font-syne tracking-tighter">About <span class="text-amber">ScriptAI</span></h1>
+                    <p class="text-white/40 text-xl max-w-2xl mx-auto italic">"Empowering creators with precision technical storytelling."</p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass p-8 space-y-4">
+                        <h3 class="text-amber font-bold uppercase tracking-widest text-xs">Our Mission</h3>
+                        <p class="text-white/80 leading-relaxed">ScriptAI was built to bridge the gap between creative vision and technical execution. We don't just generate text; we design audiovisual blueprints that save professional editors and creators hours of guesswork.</p>
+                    </div>
+                    <div class="glass p-8 space-y-4 border-amber/20">
+                        <h3 class="text-amber font-bold uppercase tracking-widest text-xs">The Technology</h3>
+                        <p class="text-white/80 leading-relaxed">Powered by the latest Google Gemini and Gemma models, optimized with custom-built high-retention frameworks drawn from thousands of viral video patterns.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold font-syne text-center">Core Capabilities</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i data-lucide="zap" class="text-amber w-5 h-5"></i>
+                            <span class="text-sm font-medium">Production Tables</span>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i data-lucide="camera" class="text-amber w-5 h-5"></i>
+                            <span class="text-sm font-medium">Auto-ShotLists</span>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i data-lucide="trending-up" class="text-amber w-5 h-5"></i>
+                            <span class="text-sm font-medium">Retention Scores</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-10">
+                    <button onclick="app.currentStep = 0; app.renderStep();" class="btn-primary px-10">Back to Dashboard</button>
+                </div>
+            </div>
+        `;
+    }
+
     exportPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -1424,7 +1470,9 @@ class ScriptAI {
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
                     <!-- PHASE 1 & 2 & 3 - ACTIVE TOOLS -->
-                    ${Object.entries(this.tools).map(([id, tool]) => `
+                    ${Object.entries(this.tools).map(([id, tool]) => {
+            if (id === 'voice_clone') return ''; // Handled separately below or if you want it in the main grid, remove the other block
+            return `
                         <div class="card-clickable group border-white/5 hover:border-amber/40 p-10 flex flex-col h-full" onclick="app.selectTool('${id}')">
                             <div class="w-16 h-16 bg-amber/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
                                 <i data-lucide="${tool.icon}" class="text-amber w-8 h-8"></i>
@@ -1437,8 +1485,8 @@ class ScriptAI {
                                 </span>
                                 <i data-lucide="arrow-right" class="w-4 h-4 text-amber opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
                             </div>
-                        </div>
-                    `).join('')}
+                        </div>`;
+        }).join('')}
 
                     <!-- PHASE 3 - ACTIVE TOOLS (VOICE) -->
                     ${Object.entries(this.tools).filter(([id]) => id === 'voice_clone').map(([id, tool]) => `
@@ -1482,8 +1530,10 @@ class ScriptAI {
     }
 
     init() {
+        this.renderStepper();
+        this.renderStep();
+        this.bindGlobalEvents();
         lucide.createIcons();
-        if (this.currentStep === 0) this.renderLibrary();
     }
 
     renderLibrary() {

@@ -42,20 +42,19 @@
                     class="text-white/40 hover:text-white transition-colors text-sm font-bold flex items-center gap-2">
                     <i data-lucide="home" class="w-4 h-4"></i> Dashboard
                 </button>
+                <button
+                    onclick="app.currentMode = 'about'; app.currentStep = -1; app.renderStep(); app.renderStepper();"
+                    class="text-white/40 hover:text-white transition-colors text-sm font-bold flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4"></i> About Us
+                </button>
             </div>
 
             <div class="flex gap-2" id="stepper">
-                <div class="w-8 h-1 round-full bg-amber shadow-[0_0_10px_rgba(255,170,0,0.5)]"></div>
-                <div class="w-8 h-1 round-full bg-white/10"></div>
-                <div class="w-8 h-1 round-full bg-white/10"></div>
-                <div class="w-8 h-1 round-full bg-white/10"></div>
-                <div class="w-8 h-1 round-full bg-white/10"></div>
-                <div class="w-8 h-1 round-full bg-white/10"></div>
-                <div class="w-8 h-1 round-full bg-white/10"></div>
+                <!-- Dynamic dots -->
             </div>
 
             <div class="text-xs text-white/40 font-medium uppercase tracking-widest hidden md:block" id="step-name">
-                Step 1 — Subject
+                ScriptAI Dashboard
             </div>
         </header>
 
