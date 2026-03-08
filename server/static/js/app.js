@@ -1390,8 +1390,20 @@ class ScriptAI {
     }
 
     getAboutHTML() {
+        const toolExplanations = {
+            full_script: "The ultimate blueprint for 10/10 content. Includes spoken text, visual cues, editing notes, and precise timecodes.",
+            hooks_only: "Focus purely on the first 5 seconds. Get 5 psychologists-backed hooks that stop the scroll and skyrocket your retention.",
+            rewriter: "Have a draft that feels 'flat'? Our rewriter injects energy, improves rhythm, and optimizes vocabulary for your target audience.",
+            calculator: "Stop guessing. Get a precise estimate of your video's length based on a natural 130 words-per-minute speaking pace.",
+            adapter: "Re-purpose your content like a pro. Instantly convert a long YouTube transcript into punchy TikTok, Reel, or Short scripts.",
+            shot_list: "The assistant director you always wanted. Converts your script into a technical shooting list grouped by gear and location.",
+            reference_analyzer: "Reverse-engineer success. Paste a transcript of a video you love and discover the exact 'Viral DNA' that made it work.",
+            retention_predictor: "Know before you post. Our AI simulates viewer behavior to predict where people might drop off and how to fix it.",
+            voice_clone: "Maintain your unique brand. Extract the exact editorial voice from your previous scripts and apply it to any new topic."
+        };
+
         return `
-            <div class="max-w-4xl mx-auto space-y-12 animate-fade-up pt-10 pb-20">
+            <div class="max-w-4xl mx-auto space-y-16 animate-fade-up pt-10 pb-20">
                 <header class="text-center space-y-4">
                     <h1 class="text-6xl font-bold font-syne tracking-tighter">About <span class="text-amber">ScriptAI</span></h1>
                     <p class="text-white/40 text-xl max-w-2xl mx-auto italic">"Empowering creators with precision technical storytelling."</p>
@@ -1408,21 +1420,28 @@ class ScriptAI {
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <h2 class="text-2xl font-bold font-syne text-center">Core Capabilities</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
-                            <i data-lucide="zap" class="text-amber w-5 h-5"></i>
-                            <span class="text-sm font-medium">Production Tables</span>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
-                            <i data-lucide="camera" class="text-amber w-5 h-5"></i>
-                            <span class="text-sm font-medium">Auto-ShotLists</span>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
-                            <i data-lucide="trending-up" class="text-amber w-5 h-5"></i>
-                            <span class="text-sm font-medium">Retention Scores</span>
-                        </div>
+                <div class="space-y-10">
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold font-syne mb-2">Our Specialized Workflows</h2>
+                        <p class="text-white/40">Every tool is a surgical instrument for content creation.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${Object.entries(this.tools).map(([id, tool]) => `
+                            <div class="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-amber/20 transition-all space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-amber/10 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="${tool.icon}" class="text-amber w-5 h-5"></i>
+                                    </div>
+                                    <h4 class="font-bold text-lg">${tool.name}</h4>
+                                </div>
+                                <p class="text-white/50 text-sm leading-relaxed">${toolExplanations[id] || tool.desc}</p>
+                                <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/20">
+                                    <i data-lucide="check-circle" class="w-3 h-3"></i>
+                                    <span>${tool.steps} Steps Optimized</span>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
 
